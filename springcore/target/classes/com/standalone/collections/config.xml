@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/util
+	http://www.springframework.org/schema/util/spring-util.xsd">
+
+	<context:annotation-config/>
+	<!--standalone collection used multiple times -->
+
+	<util:list id="standlist" list-class="java.util.LinkedList">
+		<value>Pranav</value>
+		<value>Kunal</value>
+		<value>Suraj</value>
+	</util:list>
+	
+	<util:map id="fee" map-class="java.util.HashMap">
+		<entry key="Spring" value="10000" />
+		<entry key="Django" value="8000" />
+		<entry key="Java" value="10000" />
+	</util:map>
+	
+	<util:properties id="props">
+		<prop key="driver">com.sql.cj.jdbc.Driver</prop>
+		<prop key="url">jdbc:mysql://localhost:3306/database</prop>
+		<prop key="user">root</prop>
+		<prop key="password">Mysql@1234</prop>
+	</util:properties>
+	
+	<bean name="person" class="com.standalone.collections.Person">
+		<property name="friends">
+			<!-- <list> <value>Pranav</value> <value>Kunal</value> <value>Suraj</value> 
+				</list> -->
+				
+			<ref bean="standlist"/>
+		</property>
+	</bean>
+
+</beans>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd">
+
+   <!-- creating bean using value as element -->
+	<bean name="emp1" class="com.collections.Employee">
+		<property name="empName" value="Pranav" />
+		 
+	
+		<property name="empPhoneNo">
+			<list>
+				<value>102839484</value>
+				<value>349403490</value>
+				<value>564639484</value>
+				<null/>
+			</list>
+		</property>
+		<property name="empLocations">
+			<set>
+				<value>Pune</value>
+				<value>Pune</value>
+				<value>Mumbai</value>
+			</set>
+		</property>
+		<property name="props">
+			<props>
+				<prop key="empId">101</prop>
+				<prop key="empProjectCode">JelliFish</prop>
+				<prop key="empRole">Backend Dev</prop>
+			</props>
+		</property>
+		<property name="empInfo">
+			<map>
+				<entry key="workTime" value="8 hr"/>
+				<entry key="break" value="2 hr"/>
+				<entry key="task" value="spring init work"/>
+			</map>
+		</property>
+	</bean>
+	
+</beans>
