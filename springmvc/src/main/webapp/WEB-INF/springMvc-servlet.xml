@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/tx
+	https://www.springframework.org/schema/tx/spring-tx.xsd
+	http://www.springframework.org/schema/aop
+	https://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/mvc
+	https://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+	<!-- Step 2 :- create spring configuration file -->
+	<context:component-scan base-package="com.mvc"></context:component-scan>
+	<!-- Step 3 :- configure view resolver (InternalResourceViewResolver) -->
+
+	<bean name="viewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+	<bean
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+		name="ds">
+		<property name="driverClassName"
+			value="com.mysql.cj.jdbc.Driver" />
+		<property name="username" value="root" />
+		<property name="password" value="Mysql@1234" />
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/spring_orm" />
+	</bean>
+
+	<!-- we have to pass (1) dataSourse (2) hibernateProperties and (3) annotedClasses -->
+	<bean
+		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean"
+		name="factory">
+		<!-- (1) dataSourse -->
+		<property name="dataSource" ref="ds" />
+
+		<!-- (2) hibernateProperties -->
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+			</props>
+		</property>
+
+		<!-- (3) annotedClasses -->
+		<property name="annotatedClasses">
+			<list>
+				<value>
+					com.mvc.models.User
+				</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- HibernateTemplate requires object of SessionFactory which is interface 
+		so we have to pass LocalFactorySessionBean -->
+	<bean class="org.springframework.orm.hibernate5.HibernateTemplate"
+		name="hiberTemp">
+		<property name="sessionFactory" ref="factory"></property>
+	</bean>
+
+	<bean
+		class="org.springframework.orm.hibernate5.HibernateTransactionManager"
+		id="transactionManager">
+		<property name="sessionFactory" ref="factory"></property>
+	</bean>
+
+	<tx:annotation-driven
+		transaction-manager="transactionManager" />
+
+	<!-- <bean class="com.orm.dao.PlayerDaoImpl" name="playerDao"> <property 
+		name="hiberTemplate" ref="hiberTemp"></property> </bean> -->
+
+	<!-- declearing public resources for css and js -->
+	<mvc:annotation-driven />
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.support.StandardServletMultipartResolver" />
+	<mvc:resources location="/WEB-INF/resources/"
+		mapping="/resources/**"></mvc:resources>
+
+	<!-- configuring multipart config for file uploding -->
+	
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/welcome"/>
+			<bean class="com.mvc.interceptors.HelloInterceptor"/>
+		</mvc:interceptor>
+	</mvc:interceptors>
+
+
+</beans>
